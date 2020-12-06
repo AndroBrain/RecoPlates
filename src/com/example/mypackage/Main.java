@@ -26,7 +26,7 @@ public class Main{
 //        VideoCapture capture = new VideoCapture(0);
 //        ImageView imageView = new ImageView();
 //        HBox hBox = new HBox(imageView);
-//        Scene scene = new Scene(hBox);
+//        Scene scene = new Scene(hBox);gi
 //        primaryStage.setScene(scene);
 //    }
 
