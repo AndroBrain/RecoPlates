@@ -66,7 +66,8 @@ public class CameraStream extends Application {
         MatOfRect facesDetected = new MatOfRect();
         CascadeClassifier cascadeClassifier = new CascadeClassifier();
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
-        cascadeClassifier.load("C:\\Users\\Michal\\Desktop\\haarcascade_frontalface_alt.xml");
+        Path p= FileSystems.getDefault().getPath("haarcascade_frontalface_alt.xml");
+        cascadeClassifier.load(p.toString());
         cascadeClassifier.detectMultiScale(inputImage,
                 facesDetected,
                 1.1,
