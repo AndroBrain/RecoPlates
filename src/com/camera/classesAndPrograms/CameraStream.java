@@ -1,4 +1,4 @@
-package com.example.mypackage;
+package com.camera.classesAndPrograms;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,13 +14,16 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 public class CameraStream extends Application {
     private VideoCapture capture;
 
     public void start(Stage stage) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        capture=  new VideoCapture("C:\\Users\\Michal\\Desktop\\PeopleWalking.mp4"); // String is for videos
+        Path p= FileSystems.getDefault().getPath("PeopleWalking.mp4");
+        capture =  new VideoCapture(p.toString());
         //     capture=  new VideoCapture(0); // 0 is the camera
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
