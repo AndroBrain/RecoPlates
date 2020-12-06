@@ -14,6 +14,7 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
@@ -22,7 +23,7 @@ public class CameraStream extends Application {
 
     public void start(Stage stage) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Path p= FileSystems.getDefault().getPath("PeopleWalking.mp4");
+        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4");
         capture =  new VideoCapture(p.toString());
         //     capture=  new VideoCapture(0); // 0 is the camera
         ImageView imageView = new ImageView();
@@ -66,7 +67,7 @@ public class CameraStream extends Application {
         MatOfRect facesDetected = new MatOfRect();
         CascadeClassifier cascadeClassifier = new CascadeClassifier();
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
-        Path p= FileSystems.getDefault().getPath("haarcascade_frontalface_alt.xml");
+        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
         cascadeClassifier.load(p.toString());
         cascadeClassifier.detectMultiScale(inputImage,
                 facesDetected,
