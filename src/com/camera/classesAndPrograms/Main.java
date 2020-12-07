@@ -8,6 +8,9 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 
 public class Main{
@@ -41,8 +44,8 @@ public class Main{
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        String sourceImagePath = "C:\\Users\\Michal\\Desktop\\ja.jpg";
+        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "samochodzik.bmp"); //Cars
+        String sourceImagePath = videoPath.toString();
         String targetImagePath = "C:\\Users\\Michal\\Desktop\\jaEdited.jpg";
 
         Mat loadedImage = loadImage(sourceImagePath);
@@ -52,7 +55,8 @@ public class Main{
 
         CascadeClassifier cascadeClassifier = new CascadeClassifier();
         int minFaceSize = Math.round(loadedImage.rows() * 0.1f);
-        cascadeClassifier.load("C:\\Users\\Michal\\Desktop\\haarcascade_frontalface_alt.xml");
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "myfacedetector.xml"); //xml file
+        cascadeClassifier.load(haarcascadePath.toString());
         cascadeClassifier.detectMultiScale(loadedImage,
                 facesDetected,
                 1.1,

@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -18,7 +17,7 @@ public class CameraStream extends Application {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "dashCam.mp4"); //Cars
-        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascadeForCars.xml"); //xml file
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "myfacedetector.xml"); //xml file
         // Setting up stage
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
@@ -26,6 +25,7 @@ public class CameraStream extends Application {
         stage.setScene(scene);
         stage.show();
         ObjectDetector objectDetector = new ObjectDetector(videoPath, haarcascadePath ); // constractor with paths to video and xml file
+
         new AnimationTimer(){
             @Override
             public void handle(long l) {
