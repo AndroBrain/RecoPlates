@@ -24,8 +24,8 @@ public class CameraStream extends Application {
     public void start(Stage stage) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4");
-        capture =  new VideoCapture(p.toString());
-        //     capture=  new VideoCapture(0); // 0 is the camera
+        //capture =  new VideoCapture(p.toString());  //path to the video files
+        capture=  new VideoCapture(0); // 0 is the camera
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
         Scene scene = new Scene(hbox);
@@ -34,21 +34,21 @@ public class CameraStream extends Application {
         new AnimationTimer(){
             @Override
             public void handle(long l) {
-                imageView.setImage(getCaptureWithFaceDetection());
+                imageView.setImage(getCaptureWithFaceDetection()); //calling function to capture and detect faces
             }
         }.start();
     }
 
-    public Image getCapture() {
+    /*public Image getCapture() { //this function is not used!
         Mat mat = new Mat();
         capture.read(mat);
         return mat2Img(mat);
-    }
+    }*/
 
     public Image getCaptureWithFaceDetection() {
-        Mat mat = new Mat();
-        capture.read(mat);
-        Mat haarClassifiedImg = detectFace(mat);
+        Mat mat = new Mat(); //new matrix
+        capture.read(mat); //get new frame from capture source into that matrix
+        Mat haarClassifiedImg = detectFace(mat); //calling detect face function and storing it in a matrix
         return mat2Img(haarClassifiedImg);
     }
 
@@ -56,7 +56,8 @@ public class CameraStream extends Application {
         MatOfByte bytes = new MatOfByte();
         Imgcodecs.imencode(".jpg", mat, bytes);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes.toArray());
-        Image img = new Image(inputStream); return img;
+        Image img = new Image(inputStream);
+        return img;
     }
 
     public static void main(String[] args) {
@@ -64,23 +65,23 @@ public class CameraStream extends Application {
     }
 
     public static Mat detectFace(Mat inputImage) {
-        MatOfRect facesDetected = new MatOfRect();
-        CascadeClassifier cascadeClassifier = new CascadeClassifier();
+        MatOfRect facesDetected = new MatOfRect(); //new matrix for detected faces
+        CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
         Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
-        cascadeClassifier.load(p.toString());
-        cascadeClassifier.detectMultiScale(inputImage,
-                facesDetected,
-                1.1,
+        cascadeClassifier.load(p.toString()); //loading file with machine learned samples
+        cascadeClassifier.detectMultiScale(inputImage, //source
+                facesDetected, //results
+                1.1, //settings
                 3,
                 Objdetect.CASCADE_SCALE_IMAGE,
                 new Size(minFaceSize, minFaceSize),
                 new Size()
         );
-        Rect[] facesArray =  facesDetected.toArray();
-        for(Rect face : facesArray) {
+        Rect[] facesArray =  facesDetected.toArray(); //needed for for function
+        for(Rect face : facesArray) { //displaying red squares
             Imgproc.rectangle(inputImage, face.tl(), face.br(), new Scalar(0, 0, 255), 3 );
         }
-        return inputImage;
+        return inputImage; //return updated image matrix
     }
 }
