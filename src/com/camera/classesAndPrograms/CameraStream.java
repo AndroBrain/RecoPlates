@@ -21,11 +21,12 @@ import java.nio.file.Path;
 public class CameraStream extends Application {
     private VideoCapture capture;
 
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4");
-        capture =  new VideoCapture(p.toString());
-        //     capture=  new VideoCapture(0); // 0 is the camera
+        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4"); // Wczytuje pliki
+        capture =  new VideoCapture(videoPath.toString());
+        //capture =  new VideoCapture(0); // 0 is the camera
+        // Set up an image
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
         Scene scene = new Scene(hbox);
@@ -67,8 +68,8 @@ public class CameraStream extends Application {
         MatOfRect facesDetected = new MatOfRect();
         CascadeClassifier cascadeClassifier = new CascadeClassifier();
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
-        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
-        cascadeClassifier.load(p.toString());
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
+        cascadeClassifier.load(haarcascadePath.toString());
         cascadeClassifier.detectMultiScale(inputImage,
                 facesDetected,
                 1.1,
@@ -83,4 +84,5 @@ public class CameraStream extends Application {
         }
         return inputImage;
     }
+
 }
