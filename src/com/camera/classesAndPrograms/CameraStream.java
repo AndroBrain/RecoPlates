@@ -23,9 +23,9 @@ public class CameraStream extends Application {
 
     public void start(Stage stage) throws Exception {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4");
-        //capture =  new VideoCapture(p.toString());  //path to the video files
-        capture=  new VideoCapture(0); // 0 is the camera
+        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "PeopleWalking.mp4");
+        capture =  new VideoCapture(videoPath.toString());  //path to the video files
+        //capture=  new VideoCapture(0); // 0 is the camera
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
         Scene scene = new Scene(hbox);
@@ -68,8 +68,8 @@ public class CameraStream extends Application {
         MatOfRect facesDetected = new MatOfRect(); //new matrix for detected faces
         CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
-        Path p= FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
-        cascadeClassifier.load(p.toString()); //loading file with machine learned samples
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml");
+        cascadeClassifier.load(haarcascadePath.toString()); //loading file with machine learned samples
         cascadeClassifier.detectMultiScale(inputImage, //source
                 facesDetected, //results
                 1.1, //settings
