@@ -21,18 +21,18 @@ public class ObjectDetector {
     public ObjectDetector(Path pathToVideo, Path pathToFirstHaarcascade, Path pathToNestedHaarcascade) {
         this.pathToFirstHaarcascade = pathToFirstHaarcascade;
         this.pathToNestedHaarcascade = pathToNestedHaarcascade;
-        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
-//        capture =  new VideoCapture(0);  //path to the video files
+       // capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+        capture =  new VideoCapture(0);  //path to the video files
     }
 
     public Image getCaptureWithObjectDetection() {
         Mat mat = new Mat(); //new matrix
         capture.read(mat); //get new frame from capture source into that matrix
-        Mat haarClassifiedImg = detecObject(mat); //calling detect face function and storing it in a matrix
-        return mat2Img(haarClassifiedImg);
+        Mat haarClassifiedImg = detectObject(mat); //calling detect object function and storing it in a matrix
+        return mat2Img(haarClassifiedImg); //returning image of that new matrix
     }
 
-    private Mat detecObject(Mat inputImage) {
+    private Mat detectObject(Mat inputImage) {
         MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
         CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minObjectSize = Math.round(inputImage.rows() * 0.1f);
@@ -46,8 +46,8 @@ public class ObjectDetector {
                 new Size()
         );
 
-        CascadeClassifier classifier = new CascadeClassifier();
-        classifier.load(pathToNestedHaarcascade.toString());
+        CascadeClassifier classifier = new CascadeClassifier(); //creating 2nd classifier, this time for licence plates
+        classifier.load(pathToNestedHaarcascade.toString());    //loading it from file
 
         Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
         for(Rect object : objectsArray) {
