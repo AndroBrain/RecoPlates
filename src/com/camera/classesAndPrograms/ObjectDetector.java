@@ -9,6 +9,8 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ObjectDetector {
@@ -17,7 +19,8 @@ public class ObjectDetector {
 
     public ObjectDetector(Path pathToVideo, Path pathToHaarcascade) {
         this.pathToHaarcascade = pathToHaarcascade;
-        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+//        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+        capture =  new VideoCapture(0);  //path to the video files
     }
 
     public Image getCaptureWithObjectDetection() {
@@ -28,21 +31,46 @@ public class ObjectDetector {
     }
 
     private Mat detecObject(Mat inputImage) {
-        MatOfRect facesDetected = new MatOfRect(); //new matrix for detected faces
+        MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
         CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
-        int minFaceSize = Math.round(inputImage.rows() * 0.1f);
+        int minObjectSize = Math.round(inputImage.rows() * 0.1f);
         cascadeClassifier.load(this.pathToHaarcascade.toString()); //loading file with machine learned samples
         cascadeClassifier.detectMultiScale(inputImage, //source
-                facesDetected, //results
+                objectsDetected, //results
                 1.1, //settings
                 3,
                 Objdetect.CASCADE_SCALE_IMAGE,
-                new Size(minFaceSize, minFaceSize),
+                new Size(minObjectSize, minObjectSize),
                 new Size()
         );
-        Rect[] facesArray =  facesDetected.toArray(); //needed for for function
-        for(Rect face : facesArray) { //displaying red squares
-            Imgproc.rectangle(inputImage, face.tl(), face.br(), new Scalar(0, 0, 255), 3 );
+
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_eye.xml");
+
+        CascadeClassifier classifier = new CascadeClassifier();
+        classifier.load(haarcascadePath.toString());
+
+        Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
+        for(Rect object : objectsArray) { //displaying red squares
+            Imgproc.rectangle(inputImage, object.tl(), object.br(), new Scalar(0, 0, 255), 3);
+
+            Mat platePosition = inputImage.submat(object);
+
+            MatOfRect platesDetected = new MatOfRect();
+
+            classifier.detectMultiScale(platePosition, //source
+                    platesDetected, //results
+                    1.1, //settings
+                    3,
+                    Objdetect.CASCADE_SCALE_IMAGE,
+                    new Size(minObjectSize, minObjectSize),
+                    new Size()
+            );
+
+            for (Rect plate:platesDetected.toArray()) {
+                Point point1 = new Point(plate.tl().x + object.tl().x, plate.tl().y + object.tl().y);
+                Point point2 = new Point(plate.br().x + object.tl().x, plate.br().y + object.tl().y);
+                Imgproc.rectangle(inputImage, point1, point2, new Scalar(255, 0, 0), 3);
+            }
         }
         return inputImage; //return updated image matrix
     }

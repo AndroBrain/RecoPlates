@@ -55,7 +55,7 @@ public class Main{
 
         CascadeClassifier cascadeClassifier = new CascadeClassifier();
         int minFaceSize = Math.round(loadedImage.rows() * 0.1f);
-        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "myfacedetector.xml"); //xml file
+        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascadeForCars.xml"); //xml file
         cascadeClassifier.load(haarcascadePath.toString());
         cascadeClassifier.detectMultiScale(loadedImage,
                 facesDetected,
