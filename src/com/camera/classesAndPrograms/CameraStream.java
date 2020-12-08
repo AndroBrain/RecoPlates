@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.opencv.core.*;
 
@@ -16,9 +17,9 @@ public class CameraStream extends Application {
     public void start(Stage stage){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "dashCam.mp4"); //Cars
-        Path firstHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml"); // first xml file
-        Path nestedHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_eye.xml"); // nested xml file
+        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "auto.mp4"); //Cars
+        Path firstHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascadeForCars.xml"); // first xml file
+        Path nestedHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "myfacedetector.xml"); // nested xml file
         // Setting up stage
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
@@ -27,10 +28,14 @@ public class CameraStream extends Application {
         stage.show();
         ObjectDetector objectDetector = new ObjectDetector(videoPath, firstHaarcascadePath, nestedHaarcascadePath ); // constructor with paths to video and xml file
 
-        new AnimationTimer(){
+        new AnimationTimer() {
             @Override
             public void handle(long l) {
-                imageView.setImage(objectDetector.getCaptureWithObjectDetection());
+                try {
+                    imageView.setImage(objectDetector.getCaptureWithObjectDetection());
+                }catch (CvException e){
+                    System.exit(0);
+                }
             }
         }.start();
     }

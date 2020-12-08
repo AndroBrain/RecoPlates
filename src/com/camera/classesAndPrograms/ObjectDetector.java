@@ -25,9 +25,9 @@ public class ObjectDetector {
         nestedPictureClassifier = new CascadeClassifier();
         nestedPictureClassifier.load(pathToNestedHaarcascade.toString());
 
-//        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
 
-        capture =  new VideoCapture(0);  // your Camera
+//        capture =  new VideoCapture(0);  // your Camera
     }
 
     public Image getCaptureWithObjectDetection() {
