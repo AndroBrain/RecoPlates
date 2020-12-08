@@ -17,7 +17,7 @@ public class CameraStream extends Application {
     public void start(Stage stage){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "auto.mp4"); //Cars
+        Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "dashCam.mp4"); //Cars
         Path firstHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascadeForCars.xml"); // first xml file
         Path nestedHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "myfacedetector.xml"); // nested xml file
         // Setting up stage
@@ -38,6 +38,7 @@ public class CameraStream extends Application {
                 }
             }
         }.start();
+
     }
 
 }

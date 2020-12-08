@@ -9,8 +9,6 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ObjectDetector {
@@ -77,6 +75,19 @@ public class ObjectDetector {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes.toArray());
         Image img = new Image(inputStream);
         return img;
+    }
+
+// Prepage image for reading
+    private Mat prepareImage(Mat img){
+        Mat imgGray = new Mat();
+        Imgproc.cvtColor(img, imgGray, Imgproc.COLOR_BGR2GRAY);
+
+        Mat imgGaussianBlur = new Mat();
+        Imgproc.GaussianBlur(imgGray, imgGaussianBlur, new Size(3, 3), 0);
+
+        Mat imtAdaptiveThreshold = new Mat();
+        Imgproc.adaptiveThreshold(imgGaussianBlur, imtAdaptiveThreshold, 255, 0, 0, 99, 4);
+        return imtAdaptiveThreshold;
     }
 
 }

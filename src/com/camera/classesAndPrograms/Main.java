@@ -29,7 +29,8 @@ public class Main{
         MatOfByte bytes = new MatOfByte();
         Imgcodecs.imencode(".jpg", mat, bytes);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes.toArray());
-        Image img = new Image(inputStream); return img;
+        Image img = new Image(inputStream);
+        return img;
     }
 
     public static void main(String[] args) {
