@@ -23,31 +23,31 @@ public class ObjectDetector {
     public Image getCaptureWithObjectDetection() {
         Mat mat = new Mat(); //new matrix
         capture.read(mat); //get new frame from capture source into that matrix
-        Mat haarClassifiedImg = detecObject(mat); //calling detect face function and storing it in a matrix
-        return mat2Img(haarClassifiedImg);
+        Mat haarClassifiedImg = detectObject(mat); //calling detect object function and storing it in a matrix
+        return mat2Img(haarClassifiedImg);        //and returning an image of that new matrix
     }
 
-    private Mat detecObject(Mat inputImage) {
-        MatOfRect facesDetected = new MatOfRect(); //new matrix for detected faces
+    private Mat detectObject(Mat inputImage) {
+        MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected faces
         CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minFaceSize = Math.round(inputImage.rows() * 0.1f);
         cascadeClassifier.load(this.pathToHaarcascade.toString()); //loading file with machine learned samples
         cascadeClassifier.detectMultiScale(inputImage, //source
-                facesDetected, //results
+                objectsDetected, //results
                 1.1, //settings
                 3,
                 Objdetect.CASCADE_SCALE_IMAGE,
                 new Size(minFaceSize, minFaceSize),
                 new Size()
         );
-        Rect[] facesArray =  facesDetected.toArray(); //needed for for function
-        for(Rect face : facesArray) { //displaying red squares
+        Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
+        for(Rect face : objectsArray) { //displaying red squares
             Imgproc.rectangle(inputImage, face.tl(), face.br(), new Scalar(0, 0, 255), 3 );
         }
         return inputImage; //return updated image matrix
     }
 
-    private Image mat2Img(Mat mat) {
+    private Image mat2Img(Mat mat) { //converting matrix to img
         MatOfByte bytes = new MatOfByte();
         Imgcodecs.imencode(".jpg", mat, bytes);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes.toArray());

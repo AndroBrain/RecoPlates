@@ -24,7 +24,7 @@ public class CameraStream extends Application {
         Scene scene = new Scene(hbox);
         stage.setScene(scene);
         stage.show();
-        ObjectDetector objectDetector = new ObjectDetector(videoPath, haarcascadePath ); // constractor with paths to video and xml file
+        ObjectDetector objectDetector = new ObjectDetector(videoPath, haarcascadePath ); // constructor with paths to video and xml file
 
         new AnimationTimer(){
             @Override
