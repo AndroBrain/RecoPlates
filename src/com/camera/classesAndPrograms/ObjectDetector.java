@@ -39,33 +39,16 @@ public class ObjectDetector {
 
     private Mat detectObject(Mat inputImage) {
         MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
-        int minObjectSize = Math.round(inputImage.rows() * 0.1f);
 
-        entirePictureClassifier.detectMultiScale(inputImage, //source
-                objectsDetected, //results
-                1.1, //settings
-                3,
-                Objdetect.CASCADE_SCALE_IMAGE,
-                new Size(minObjectSize, minObjectSize),
-                new Size()
-        );
+        detect(inputImage, objectsDetected, entirePictureClassifier, Math.round(inputImage.rows() * 0.1f));
 
         Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
         for(Rect object : objectsArray) {
             Imgproc.rectangle(inputImage, object.tl(), object.br(), new Scalar(0, 0, 255), 3);//displaying red squares
 
             Mat platePosition = inputImage.submat(object);
-
             MatOfRect platesDetected = new MatOfRect();
-
-            nestedPictureClassifier.detectMultiScale(platePosition, //source
-                    platesDetected, //results
-                    1.1, //settings
-                    3,
-                    Objdetect.CASCADE_SCALE_IMAGE,
-                    new Size(minObjectSize, minObjectSize),
-                    new Size()
-            );
+            detect(platePosition, platesDetected, nestedPictureClassifier, Math.round(platePosition.rows() * 0.1f));
 
             for (Rect plate:platesDetected.toArray()) { // Needed to move position
                 Point point1 = new Point(plate.tl().x + object.tl().x, plate.tl().y + object.tl().y);
@@ -74,6 +57,18 @@ public class ObjectDetector {
             }
         }
         return inputImage; //return updated image matrix
+    }
+
+//    Detects all objects in inputImage for given classifier and saves them into MatOfRect
+    private void detect(Mat inputImage, MatOfRect allSquares, CascadeClassifier classifier, int minObjectSize){
+        classifier.detectMultiScale(inputImage, //source
+                allSquares, //results
+                1.1, //settings
+                3,
+                Objdetect.CASCADE_SCALE_IMAGE,
+                new Size(minObjectSize, minObjectSize),
+                new Size()
+        );
     }
 
     private Image mat2Img(Mat mat) { //converting matrix to img
