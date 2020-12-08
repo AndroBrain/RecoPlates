@@ -14,13 +14,15 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ObjectDetector {
-    private final Path pathToHaarcascade;
+    private final Path pathToFirstHaarcascade;
+    private final Path pathToNestedHaarcascade;
     private VideoCapture capture;
 
-    public ObjectDetector(Path pathToVideo, Path pathToHaarcascade) {
-        this.pathToHaarcascade = pathToHaarcascade;
-//        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
-        capture =  new VideoCapture(0);  //path to the video files
+    public ObjectDetector(Path pathToVideo, Path pathToFirstHaarcascade, Path pathToNestedHaarcascade) {
+        this.pathToFirstHaarcascade = pathToFirstHaarcascade;
+        this.pathToNestedHaarcascade = pathToNestedHaarcascade;
+        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+//        capture =  new VideoCapture(0);  //path to the video files
     }
 
     public Image getCaptureWithObjectDetection() {
@@ -34,7 +36,7 @@ public class ObjectDetector {
         MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
         CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minObjectSize = Math.round(inputImage.rows() * 0.1f);
-        cascadeClassifier.load(this.pathToHaarcascade.toString()); //loading file with machine learned samples
+        cascadeClassifier.load(this.pathToFirstHaarcascade.toString()); //loading file with machine learned samples
         cascadeClassifier.detectMultiScale(inputImage, //source
                 objectsDetected, //results
                 1.1, //settings
@@ -44,14 +46,12 @@ public class ObjectDetector {
                 new Size()
         );
 
-        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_eye.xml");
-
         CascadeClassifier classifier = new CascadeClassifier();
-        classifier.load(haarcascadePath.toString());
+        classifier.load(pathToNestedHaarcascade.toString());
 
         Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
-        for(Rect object : objectsArray) { //displaying red squares
-            Imgproc.rectangle(inputImage, object.tl(), object.br(), new Scalar(0, 0, 255), 3);
+        for(Rect object : objectsArray) {
+            Imgproc.rectangle(inputImage, object.tl(), object.br(), new Scalar(0, 0, 255), 3);//displaying red squares
 
             Mat platePosition = inputImage.submat(object);
 
@@ -66,10 +66,10 @@ public class ObjectDetector {
                     new Size()
             );
 
-            for (Rect plate:platesDetected.toArray()) {
+            for (Rect plate:platesDetected.toArray()) { // Needed to move position
                 Point point1 = new Point(plate.tl().x + object.tl().x, plate.tl().y + object.tl().y);
                 Point point2 = new Point(plate.br().x + object.tl().x, plate.br().y + object.tl().y);
-                Imgproc.rectangle(inputImage, point1, point2, new Scalar(255, 0, 0), 3);
+                Imgproc.rectangle(inputImage, point1, point2, new Scalar(255, 0, 0), 3);//displaying blue squares inside red square
             }
         }
         return inputImage; //return updated image matrix

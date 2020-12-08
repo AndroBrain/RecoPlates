@@ -17,14 +17,15 @@ public class CameraStream extends Application {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "dashCam.mp4"); //Cars
-        Path haarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml"); //xml file
+        Path firstHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_frontalface_alt.xml"); // first xml file
+        Path nestedHaarcascadePath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "haarcascade_eye.xml"); // nested xml file
         // Setting up stage
         ImageView imageView = new ImageView();
         HBox hbox = new HBox(imageView);
         Scene scene = new Scene(hbox);
         stage.setScene(scene);
         stage.show();
-        ObjectDetector objectDetector = new ObjectDetector(videoPath, haarcascadePath ); // constructor with paths to video and xml file
+        ObjectDetector objectDetector = new ObjectDetector(videoPath, firstHaarcascadePath, nestedHaarcascadePath ); // constructor with paths to video and xml file
 
         new AnimationTimer(){
             @Override
