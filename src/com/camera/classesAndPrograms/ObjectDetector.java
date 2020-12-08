@@ -75,7 +75,7 @@ public class ObjectDetector {
         return inputImage; //return updated image matrix
     }
 
-    private Image mat2Img(Mat mat) {
+    private Image mat2Img(Mat mat) { //converting matrix to img
         MatOfByte bytes = new MatOfByte();
         Imgcodecs.imencode(".jpg", mat, bytes);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes.toArray());
