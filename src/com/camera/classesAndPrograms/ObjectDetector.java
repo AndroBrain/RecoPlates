@@ -9,20 +9,23 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ObjectDetector {
-    private final Path pathToFirstHaarcascade;
-    private final Path pathToNestedHaarcascade;
+    private final CascadeClassifier entirePictureClassifier;
+    private final CascadeClassifier nestedPictureClassifier;
     private VideoCapture capture;
 
     public ObjectDetector(Path pathToVideo, Path pathToFirstHaarcascade, Path pathToNestedHaarcascade) {
-        this.pathToFirstHaarcascade = pathToFirstHaarcascade;
-        this.pathToNestedHaarcascade = pathToNestedHaarcascade;
-        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
-//        capture =  new VideoCapture(0);  //path to the video files
+        entirePictureClassifier = new CascadeClassifier();
+        entirePictureClassifier.load(pathToFirstHaarcascade.toString());
+
+        nestedPictureClassifier = new CascadeClassifier();
+        nestedPictureClassifier.load(pathToNestedHaarcascade.toString());
+
+//        capture =  new VideoCapture(pathToVideo.toString());  //path to the video files
+
+        capture =  new VideoCapture(0);  // your Camera
     }
 
     public Image getCaptureWithObjectDetection() {
@@ -34,10 +37,9 @@ public class ObjectDetector {
 
     private Mat detecObject(Mat inputImage) {
         MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
-        CascadeClassifier cascadeClassifier = new CascadeClassifier(); //cascadeClassifier = new CascadeClassifier, make me say it one more time
         int minObjectSize = Math.round(inputImage.rows() * 0.1f);
-        cascadeClassifier.load(this.pathToFirstHaarcascade.toString()); //loading file with machine learned samples
-        cascadeClassifier.detectMultiScale(inputImage, //source
+
+        entirePictureClassifier.detectMultiScale(inputImage, //source
                 objectsDetected, //results
                 1.1, //settings
                 3,
@@ -45,9 +47,6 @@ public class ObjectDetector {
                 new Size(minObjectSize, minObjectSize),
                 new Size()
         );
-
-        CascadeClassifier classifier = new CascadeClassifier();
-        classifier.load(pathToNestedHaarcascade.toString());
 
         Rect[] objectsArray =  objectsDetected.toArray(); //needed for for function
         for(Rect object : objectsArray) {
@@ -57,7 +56,7 @@ public class ObjectDetector {
 
             MatOfRect platesDetected = new MatOfRect();
 
-            classifier.detectMultiScale(platePosition, //source
+            nestedPictureClassifier.detectMultiScale(platePosition, //source
                     platesDetected, //results
                     1.1, //settings
                     3,

@@ -15,16 +15,6 @@ import java.nio.file.Path;
 
 public class Main{
 
-//    @Override
-//    public void start(Stage primaryStage) throws Exception{
-////        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-//        VideoCapture capture = new VideoCapture(0);
-//        ImageView imageView = new ImageView();
-//        HBox hBox = new HBox(imageView);
-//        Scene scene = new Scene(hBox);gi
-//        primaryStage.setScene(scene);
-//    }
-
     public static Mat loadImage(String imagePath) {
         Imgcodecs imageCodecs = new Imgcodecs();
         return imageCodecs.imread(imagePath);
@@ -47,6 +37,9 @@ public class Main{
         Path videoPath = FileSystems.getDefault().getPath("necessaryFiles" + File.separator + "samochodzik.bmp"); //Cars
         String sourceImagePath = videoPath.toString();
         String targetImagePath = "C:\\Users\\Michal\\Desktop\\jaEdited.jpg";
+
+
+
 
         Mat loadedImage = loadImage(sourceImagePath);
         MatOfRect facesDetected = new MatOfRect();
