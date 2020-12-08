@@ -9,6 +9,8 @@ import org.opencv.objdetect.Objdetect;
 import org.opencv.videoio.VideoCapture;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class ObjectDetector {
@@ -31,11 +33,11 @@ public class ObjectDetector {
     public Image getCaptureWithObjectDetection() {
         Mat mat = new Mat(); //new matrix
         capture.read(mat); //get new frame from capture source into that matrix
-        Mat haarClassifiedImg = detecObject(mat); //calling detect face function and storing it in a matrix
-        return mat2Img(haarClassifiedImg);
+        Mat haarClassifiedImg = detectObject(mat); //calling detect object function and storing it in a matrix
+        return mat2Img(haarClassifiedImg); //returning image of that new matrix
     }
 
-    private Mat detecObject(Mat inputImage) {
+    private Mat detectObject(Mat inputImage) {
         MatOfRect objectsDetected = new MatOfRect(); //new matrix for detected objects
         int minObjectSize = Math.round(inputImage.rows() * 0.1f);
 
