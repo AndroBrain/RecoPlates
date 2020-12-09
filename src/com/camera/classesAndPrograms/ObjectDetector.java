@@ -32,6 +32,7 @@ public class ObjectDetector {
         Mat mat = new Mat(); //new matrix
         capture.read(mat); //get new frame from capture source into that matrix
         Mat haarClassifiedImg = detectObject(mat); //calling detect object function and storing it in a matrix
+        haarClassifiedImg = prepareImage(haarClassifiedImg);
         return mat2Img(haarClassifiedImg); //returning image of that new matrix
     }
 
