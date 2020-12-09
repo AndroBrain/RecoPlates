@@ -82,12 +82,12 @@ public class ObjectDetector {
         Mat imgGray = new Mat();
         Imgproc.cvtColor(img, imgGray, Imgproc.COLOR_BGR2GRAY);
 
-        Mat imgGaussianBlur = new Mat();
-        Imgproc.GaussianBlur(imgGray, imgGaussianBlur, new Size(3, 3), 0);
+//        Mat imgGaussianBlur = new Mat();
+//        Imgproc.GaussianBlur(imgGray, imgGaussianBlur, new Size(3, 3), 0);
 
-        Mat imtAdaptiveThreshold = new Mat();
-        Imgproc.adaptiveThreshold(imgGaussianBlur, imtAdaptiveThreshold, 255, 0, 0, 99, 4);
-        return imtAdaptiveThreshold;
+//        Mat imtAdaptiveThreshold = new Mat();
+//        Imgproc.adaptiveThreshold(imgGaussianBlur, imtAdaptiveThreshold, 255, 0, 0, 99, 4);
+        return imgGray;
     }
 
 }
